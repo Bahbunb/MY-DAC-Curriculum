@@ -4,7 +4,17 @@
 
 -- Select department table, the employee table and vendor table. Let's explore the database a little!
 
+SELECT *
+FROM humanresources.department
 
+SELECT *
+FROM humanresources.employee
+
+SELECT *
+FROM purchasing.vendor
+
+SELECT *
+FROM humanresources.shift
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -12,6 +22,11 @@
 
 -- Select only name, start time and end time.
 
+SELECT 
+	name,
+	starttime,
+	endtime
+FROM humanresources.shift;
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -20,7 +35,11 @@
 
 -- Distinct group names from department and businessentityid from jobcandidate
 
+SELECT DISTINCT groupname
+FROM humanresources.department;
 
+SELECT DISTINCT businessentityid
+FROM humanresources.jobcandidate;
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -32,7 +51,16 @@
 
 -- LIMIT: As the name suggest it limits the number of *rows* shown at the end result
 
--- Limit the table productvendor to 10 rows and purchaseorderdetail to 100 rows
+-- Limit the table productvendor to 10 rows and purchaseorderdetail to 100 rows, MAKE IT EASIER TO VIEW THE RESULT YOU WANT TO VIEW
+
+SELECT *
+FROM purchasing.productvendor
+LIMIT 10;
+
+SELECT *
+FROM purchasing.purchaseorderdetail
+LIMIT 100;
+
 
 
 
@@ -42,49 +70,92 @@
 
 -- From the customer table Multiplcation/division/addition/subtraction the store_id
 
+SELECT 
+	customerid,
+	storeid * 10 
+FROM sales.customer
+LIMIT 15;
 
+SELECT 
+	customerid,
+	storeid * 10 AS tenstore
+FROM sales.customer
+LIMIT 15;
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---Q1: SELECT the DISTINCT title, last name, middlename and first_name of each person from the person schema. Return only 231 rows.
+--Q1: SELECT the DISTINCT title, last name, middlename and firstname of each person from the person schema. Return only 231 rows.
 --A1;
 
-
+SELECT DISTINCT
+	title,
+	lastname,
+	middlename,
+	firstname
+FROM person.person
+LIMIT 231;
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- WHERE clause: = 
 -- gender is male
 
+SELECT 
+	jobtitle,
+	maritalstatus,
+	gender
+FROM humanresources.employee
+WHERE gender = 'M';
 
 -- Only Research and Development
 
+SELECT *
+FROM humanresources.department
+WHERE groupname = 'Research and Development';
 
 -- When dealing with NULL values
 
+SELECT *
+FROM purchasing.productvendor
+WHERE onorderqty IS NULL;
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- WHERE clause: Arithmetic filter
 
 -- From customer table, territoryid = 4
+SELECT *
+FROM sales.customer
+WHERE territoryid = 4
+LIMIT 100;
 
-
--- From person table, emailpromotion <> 0
-
+-- From person table, emailpromotion <> 0 (means not equal to 0)
+SELECT *
+FROM person.person
+WHERE emailpromotion <> 0
+LIMIT 20;
 
 -- From employee table, vacationhours >= 99
-
+SELECT *
+FROM humanresources.employee
+WHERE vacationhours >= 99
+LIMIT 50;
 
 -- From employee table, sickleavehours <= 20
-
+SELECT *
+FROM humanresources.employee
+WHERE sickleavehours <= 20
+LIMIT 50;
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --WHERE clause: OR clause
 
 -- From employee table, select either Design Engineer or Tool Designer
-
+SELECT *
+FROM humanresources.employee
+WHERE jobtitle = 'Design Engineer' 
+	OR jobtitle = 'Tool Designer';
 
 -- From product, select either Black or Silver
 
@@ -93,8 +164,11 @@
 
 -- WHERE clause: AND clause
 
--- From Vendor, preferredvendorstatus and activeflag must be TRUE
-
+-- From Vendor, preferredvendorstatus and activeflag must be TRUE(this TRUE is a boolean value)
+SELECT *
+FROM purchasing.vendor
+WHERE preferredvendorstatus = TRUE
+	AND activeflag = TRUE;
 
 -- From employee, gender must be Male and maritalstatus must be single
 
@@ -104,12 +178,23 @@
 --WHERE clause: Combined OR & AND clause
 
 -- From the employee table pick either, marital status as single and gender male or marital status as married and gender female.
-
+SELECT 
+	jobtitle,
+	gender,
+	maritalstatus,
+	vacationhours,
+	sickleavehours
+FROM humanresources.employee
+WHERE (maritalstatus = 'S' AND gender = 'M')
+	OR (maritalstatus = 'M' AND gender = 'F');
 
 -- Example of poor formatting and logic.
--- From the salesperson table select territory_id either 4 or 6 and salesquota either 250000 or 300000
-
---
+-- From the salesperson table select territoryid either 4 or 6 and salesquota either 250000 or 300000
+SELECT *
+FROM sales.salesperson
+WHERE territoryid = 4 OR territoryid = 6
+	AND salesquota = 250000 OR salesquota = 300000;
+-- the AND will take priority of all the OR 
 
 
 --
@@ -119,7 +204,10 @@
 
 -- Reformatted version:
 -- The importance of having good SQL formatting when writing your SQL code.
-
+SELECT *
+FROM sales.salesperson
+WHERE (territoryid = 4 OR territoryid = 6)
+	AND (salesquota = 250000 OR salesquota = 300000);
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +219,14 @@
 -- '1984-04-30'
 -- '1985-05-04'
 
+SELECT *
+FROM humanresources.employee
 
+WHERE birthdate IN (
+	'1977-06-06',
+	'1984-04-30',
+	'1985-05-04'
+);
 
 -- Find all the middle names that contains either A or B or C.
 
